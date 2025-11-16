@@ -181,6 +181,60 @@ h2, h3, h4, h5 {
   color: var(--accent);
   font-weight: 500;
 }
+/* ============================
+   FINAL GHOST-BLOCK KILLER
+   ============================ */
+
+/* Hide any empty direct child blocks (common Streamlit spacing nodes) */
+.app-card > div:empty,
+.app-card > div:only-child:empty,
+.app-card > div > div:empty {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Use :has() (modern browsers) to hide containers that only contain an empty block */
+.app-card:has(> div:empty) { padding-top: 16px !important; }
+
+/* Hide any top-level rounded white block inside app card with no text (defensive) */
+.app-card > div[role="group"]:empty,
+.app-card > div[role="group"] > div:empty {
+  display: none !important;
+}
+
+/* Stronger selectors for Streamlit's auto-injected blocks */
+div[data-testid="stBlock"]:empty,
+div[data-testid="stVerticalBlock"]:empty,
+div[data-testid="stHorizontalBlock"]:empty {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Defensive: remove visible rounded backgrounds with large width + tiny content */
+.app-card > div > div[style*="border-radius"]:empty,
+.app-card > div[style*="border-radius"]:empty {
+  display: none !important;
+}
+
+/* Remove any stray large empty streamlit wrappers outside the card too */
+div[data-testid="stBlock"][style*="border-radius"]:not(.app-card) {
+  display: none !important;
+}
+
+/* Keep layout nice after removing the block */
+.app-card { padding-top: 18px !important; }
+
+/* Ensure textareas and uploaders keep normal spacing */
+.stTextArea, .stFileUploader, .stTextInput {
+  margin-top: 8px !important;
+}
+
 
 /* ---------------------------------------------------------------
    Responsive
