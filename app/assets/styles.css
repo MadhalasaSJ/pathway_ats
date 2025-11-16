@@ -1,128 +1,193 @@
-/* Colorful theme for ATS Checker */
-:root{
-  --primary:#0b5fff;
-  --accent:#7c3aed;
-  --success:#10b981;
-  --danger:#ef4444;
-  --muted:#6b7280;
-  --bg-card: linear-gradient(135deg, rgba(11,95,255,0.06), rgba(124,58,237,0.04));
+/* ---------------------------------------------------------------
+   Modern SaaS UI — Clean, Glassy, No Ghost Box
+-----------------------------------------------------------------*/
+
+/* Theme Colors */
+:root {
+  --primary: #0b5fff;
+  --accent: #7c3aed;
+  --success: #10b981;
+  --danger: #ef4444;
+  --muted: #6b7280;
+
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --glass-blur: blur(14px);
+
+  --card-bg: linear-gradient(135deg, rgba(11,95,255,0.05), rgba(124,58,237,0.04));
 }
 
+/* ---------------------------------------------------------------
+   Page Background (Clean curved gradients)
+-----------------------------------------------------------------*/
 html, body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.12), transparent 10%),
-              radial-gradient(900px 500px at 90% 90%, rgba(11,95,255,0.10), transparent 12%),
-              linear-gradient(180deg, #eef2ff 0%, #f0f9ff 30%, #ffffff 100%) !important;
+  background:
+      radial-gradient(1200px 800px at 15% 10%, rgba(124,58,237,0.14), transparent 28%),
+      radial-gradient(900px 700px at 90% 90%, rgba(11,95,255,0.12), transparent 30%),
+      linear-gradient(180deg, #eef2ff 0%, #f0f9ff 40%, #ffffff 100%) !important;
   background-repeat: no-repeat !important;
   min-height: 100vh;
 }
 
-/* Transparent Streamlit base */
-main[data-testid="stApp"], .stApp, .block-container, #root {
+/* ---------------------------------------------------------------
+   Remove ALL Streamlit default backgrounds + ghost blocks
+-----------------------------------------------------------------*/
+
+/* Main app wrappers */
+main[data-testid="stApp"],
+.stApp, #root {
   background: transparent !important;
 }
 
-/* FIX: Remove empty white block and tighten spacing */
-.block-container {
-  padding-top: 10px !important;
-  padding-bottom: 30px !important;
+/* Remove Streamlit default padding block (THE GHOST BOX) */
+div[data-testid="stBlock"],
+div[data-testid="stVerticalBlock"],
+div[data-testid="stHorizontalBlock"] {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* Main content card */
-.app-card {
-  margin: 20px auto;
-  padding: 24px 32px;
-  max-width: 1100px;
-  background: rgba(255,255,255,0.65) !important;
-  border-radius: 14px;
-  box-shadow: 0 14px 40px rgba(15,23,42,0.06);
-  border: 1px solid rgba(15,23,42,0.03);
-}
-
-/* Remove any accidental large empty boxes */
-.empty-space, .stSpacer {
-  display: none !important;
+/* Remove Streamlit header ghost padding */
+header, .stApp > header {
+  background: transparent !important;
   height: 0 !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 
-/* Buttons */
-.stButton>button {
-  background: linear-gradient(90deg,var(--primary),var(--accent));
-  border: none;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-weight: 600;
+/* Tighten layout */
+.block-container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-/* Headers */
+/* ---------------------------------------------------------------
+   Main Glass Panel Card
+-----------------------------------------------------------------*/
+.app-card {
+  margin: 20px auto;
+  padding: 28px 38px;
+  max-width: 1180px;
+
+  background: var(--glass-bg);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* ---------------------------------------------------------------
+   Buttons
+-----------------------------------------------------------------*/
+.stButton > button {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.stButton > button:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* ---------------------------------------------------------------
+   Headers
+-----------------------------------------------------------------*/
 h1, .stApp h1 {
   color: var(--primary);
   font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
-/* Info, success, warning boxes */
+h2, h3, h4, h5 {
+  color: #1f2937;
+}
+
+/* ---------------------------------------------------------------
+   Info / warning / success boxes
+-----------------------------------------------------------------*/
 .stInfo, .stSuccess, .stWarning {
   border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(15,23,42,0.06);
 }
 
-/* Result card */
+/* ---------------------------------------------------------------
+   Result Card Styling
+-----------------------------------------------------------------*/
 .result-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(124,58,237,0.07);
-  padding: 18px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid rgba(124, 58, 237, 0.10);
+  box-shadow: 0 10px 26px rgba(15,23,42,0.06);
 }
 
-/* Chips */
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:8px 0 14px 0;
+/* ---------------------------------------------------------------
+   Keyword Chips
+-----------------------------------------------------------------*/
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 14px 0;
 }
 
-.chip{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:13px;
-  background:rgba(15,23,42,0.06);
-  border:1px solid rgba(15,23,42,0.04);
-  color:#0f172a;
+.chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #0f172a;
+  background: rgba(15,23,42,0.06);
+  border: 1px solid rgba(15,23,42,0.04);
+  transition: 0.2s;
 }
 
-.chip-matched{
-  background: rgba(16,185,129,0.12);
-  border:1px solid rgba(16,185,129,0.12);
-  color:var(--success);
+.chip-matched {
+  background: rgba(16,185,129,0.15);
+  border-color: rgba(16,185,129,0.3);
+  color: var(--success);
 }
 
-.chip-missing{
-  background: rgba(239,68,68,0.10);
-  border:1px dashed rgba(239,68,68,0.18);
-  color:var(--danger);
+.chip-missing {
+  background: rgba(239,68,68,0.12);
+  border: 1px dashed rgba(239,68,68,0.32);
+  color: var(--danger);
 }
 
-/* Title sections */
-.section-title{
-  font-weight:700;
-  color:#0f172a;
-  margin-bottom:6px;
-}
-
-/* Lists */
+/* ---------------------------------------------------------------
+   Lists
+-----------------------------------------------------------------*/
 .list-item {
-  margin:4px 0;
+  margin: 4px 0;
+  line-height: 1.4rem;
 }
 
-.strength { color: var(--success); font-weight:600; }
-.suggestion { color: var(--accent); }
+.strength {
+  color: var(--success);
+  font-weight: 600;
+}
 
-/* Responsive */
-@media (max-width: 700px){
-  .app-card { padding: 18px 20px; }
+.suggestion {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------
+   Responsive
+-----------------------------------------------------------------*/
+@media (max-width: 700px) {
+  .app-card {
+    padding: 18px 22px;
+  }
+  .chips { gap: 6px; }
 }
