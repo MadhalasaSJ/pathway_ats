@@ -52,7 +52,7 @@ BACK4APP_REST_KEY=
 BACK4APP_MCP_URL=
 ```
 
-##Running Locally
+## Running Locally
 
 ### 1. Create a virtual environment and install dependencies:
 ```bash
