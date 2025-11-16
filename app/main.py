@@ -42,13 +42,12 @@ def main():
         st.stop()
 
     # -------------------------------------------------------------------
-    # FIX: Entire UI wrapped inside one card container
+    # Entire UI wrapped inside one clean card container
     # -------------------------------------------------------------------
     with st.container():
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
 
-        # Add tiny spacing fix to prevent ghost block
-        st.markdown("<div style='height:5px'></div>", unsafe_allow_html=True)
+        # NO fake spacing div — this caused the ghost block
 
         col1, col2 = st.columns([1, 2])
 
