@@ -26,7 +26,7 @@ The app returns an ATS score, matched and missing keywords, skill gaps, strength
 ## Key Files
 - `app/main.py` — Streamlit UI and main workflow  
 - `app/utils/text_extract.py` — PDF/DOCX/TXT text extraction  
-- `app/utils/openai_ats.py` — LLM comparison and ATS scoring  
+- `app/utils/model_ats.py` — LLM comparison and ATS scoring  
 - `app/utils/back4app_mcp.py` — Save evaluation payloads to Back4App  
 - `app/assets/styles.css` — App styling  
 - `requirements.txt` — Python dependencies  
