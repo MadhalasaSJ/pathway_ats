@@ -7,9 +7,9 @@ import streamlit as st
 from utils.text_extract import extract_text_from_file
 from utils.back4app_mcp import save_evaluation
 
-# Try to import the analysis module; catch initialization errors
+# Try to import the analysis module, catch initialization errors
 try:
-    from utils.openai_ats import analyze_resume, ACTIVE_PROVIDER, ACTIVE_MODEL
+    from utils.model_ats import analyze_resume, ACTIVE_PROVIDER, ACTIVE_MODEL
     ANALYSIS_READY = True
     ANALYSIS_ERROR = None
 except Exception as e:
