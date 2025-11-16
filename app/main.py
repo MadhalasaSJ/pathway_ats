@@ -7,9 +7,9 @@ import streamlit as st
 from utils.text_extract import extract_text_from_file
 from utils.back4app_mcp import save_evaluation
 
-# Try to import the analysis module; catch initialization errors
+# Try importing LLM analyzer
 try:
-    from utils.model_ats import analyze_resume, ACTIVE_PROVIDER, ACTIVE_MODEL
+    from utils.openai_ats import analyze_resume, ACTIVE_PROVIDER, ACTIVE_MODEL
     ANALYSIS_READY = True
     ANALYSIS_ERROR = None
 except Exception as e:
@@ -18,6 +18,7 @@ except Exception as e:
 
 
 st.set_page_config(page_title="AI ATS Checker", layout="wide")
+
 
 def load_css():
     css_path = os.path.join(os.path.dirname(__file__), "assets", "styles.css")
@@ -29,25 +30,29 @@ def load_css():
 def main():
     load_css()
     st.title("AI-powered ATS Checker")
-
     st.markdown(
         "Upload a resume (PDF or DOCX) and paste or upload a job description. Click Analyze to evaluate."
     )
 
-    # Provider info box
+    # Provider Info
     if ANALYSIS_READY:
         st.info(f"📡 Using {ACTIVE_PROVIDER} – Model: {ACTIVE_MODEL}")
     else:
         st.error(f"⚠️ Analysis not available: {ANALYSIS_ERROR}")
         st.stop()
 
-    # --- FIX: Wrap content cleanly in app-card so no empty white block appears ---
+    # -------------------------------------------------------------------
+    # FIX: Entire UI wrapped inside one card container
+    # -------------------------------------------------------------------
     with st.container():
         st.markdown('<div class="app-card">', unsafe_allow_html=True)
 
+        # Add tiny spacing fix to prevent ghost block
+        st.markdown("<div style='height:5px'></div>", unsafe_allow_html=True)
+
         col1, col2 = st.columns([1, 2])
 
-        # ---------------- LEFT SIDE (Inputs) -----------------
+        # ---------------- LEFT PANEL (INPUTS) ----------------
         with col1:
             st.header("Inputs")
 
@@ -67,15 +72,17 @@ def main():
 
             analyze_btn = st.button("Analyze")
 
-        # ---------------- RIGHT SIDE (Results) ----------------
+        # ---------------- RIGHT PANEL (RESULTS) ----------------
         with col2:
             st.header("Results")
             results_container = st.empty()
 
-        # --------------------- ANALYZE -------------------------
+        # --------------------- ANALYSIS FLOW ---------------------
         if analyze_btn:
+
             if not resume_file:
                 st.error("Please upload a resume file.")
+                st.markdown('</div>', unsafe_allow_html=True)
                 return
 
             # Extract resume text
@@ -83,46 +90,43 @@ def main():
                 resume_text = extract_text_from_file(resume_file)
             except Exception as e:
                 st.error(f"Failed to extract resume text: {e}")
+                st.markdown('</div>', unsafe_allow_html=True)
                 return
 
-            # Job description text logic
+            # JD extraction logic
             if jd_text_area.strip():
                 job_text = jd_text_area
             elif jd_file:
                 try:
                     job_text = extract_text_from_file(jd_file)
                 except Exception as e:
-                    st.warning(f"Failed to extract job description file: {e}")
+                    st.warning(f"Failed to extract job description: {e}")
                     job_text = ""
             else:
                 job_text = ""
 
             if not job_text.strip():
-                st.warning("No job description provided — results will be based only on resume analysis.")
+                st.warning("No job description provided — analysis only based on resume.")
 
-            # Call LLM
+            # Run AI
             with st.spinner("Analyzing with AI..."):
                 try:
                     analysis = analyze_resume(resume_text, job_text)
                 except Exception as e:
                     st.error(f"AI analysis failed: {e}")
+                    st.markdown('</div>', unsafe_allow_html=True)
                     return
 
-            # Parse expected fields
-            try:
-                ats_score = analysis.get("ats_score")
-                matched = analysis.get("matched_keywords", [])
-                missing = analysis.get("missing_keywords", [])
-                skill_gaps = analysis.get("skill_gaps", [])
-                strengths = analysis.get("strengths", [])
-                suggestions = analysis.get("suggestions", [])
-                experience_relevance = analysis.get("experience_relevance")
-            except Exception:
-                st.error("Unexpected analysis format from AI.")
-                st.json(analysis)
-                return
+            # Parse fields
+            ats_score = analysis.get("ats_score")
+            matched = analysis.get("matched_keywords", [])
+            missing = analysis.get("missing_keywords", [])
+            skill_gaps = analysis.get("skill_gaps", [])
+            strengths = analysis.get("strengths", [])
+            suggestions = analysis.get("suggestions", [])
+            experience_relevance = analysis.get("experience_relevance")
 
-            # ---------------- RESULTS RENDERING ----------------
+            # ------------------- RENDER RESULTS ---------------------
             with results_container.container():
                 st.subheader(f"ATS Match Score: {ats_score}/100")
                 st.metric("Experience Relevance", f"{experience_relevance}%")
@@ -174,28 +178,26 @@ def main():
                 else:
                     st.markdown("<div class='list-item'>—</div>", unsafe_allow_html=True)
 
-                # Raw JSON
                 with st.expander("Raw JSON output"):
                     st.json(analysis)
 
-            # -------- SAVE RESULTS TO BACK4APP (Optional) --------
+            # ------------------- SAVE TO BACK4APP -------------------
             try:
-                save_payload = {
+                payload = {
                     "resume_text": resume_text[:30000],
                     "job_text": job_text[:30000],
                     "ats_score": ats_score,
                     "missing_keywords": missing,
                 }
-                save_res = save_evaluation(save_payload)
-
-                if save_res.get("objectId"):
+                res = save_evaluation(payload)
+                if res.get("objectId"):
                     st.success("Evaluation saved to Back4App.")
                 else:
-                    st.warning("Evaluation not saved: unexpected response from Back4App.")
+                    st.warning("Evaluation not saved.")
             except Exception as e:
                 st.warning(f"Could not save to Back4App: {e}")
 
-        # Close app-card
+        # Close the card
         st.markdown('</div>', unsafe_allow_html=True)
 
 
