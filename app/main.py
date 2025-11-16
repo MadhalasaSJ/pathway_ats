@@ -9,7 +9,7 @@ from utils.back4app_mcp import save_evaluation
 
 # Try importing LLM analyzer
 try:
-    from utils.openai_ats import analyze_resume, ACTIVE_PROVIDER, ACTIVE_MODEL
+    from utils.model_ats import analyze_resume, ACTIVE_PROVIDER, ACTIVE_MODEL
     ANALYSIS_READY = True
     ANALYSIS_ERROR = None
 except Exception as e:
