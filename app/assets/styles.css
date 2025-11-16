@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------
-   Modern SaaS UI — Clean, Glassy, No Ghost Box
+   Modern SaaS UI — Clean, Glassy, NO GHOST BLOCKS
 -----------------------------------------------------------------*/
 
 /* Theme Colors */
@@ -18,7 +18,7 @@
 }
 
 /* ---------------------------------------------------------------
-   Page Background (Clean curved gradients)
+   PAGE BACKGROUND
 -----------------------------------------------------------------*/
 html, body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto;
@@ -31,19 +31,17 @@ html, body {
 }
 
 /* ---------------------------------------------------------------
-   Remove ALL Streamlit default backgrounds + ghost blocks
+   REMOVE STREAMLIT GHOST BLOCKS
 -----------------------------------------------------------------*/
 
-/* Main app wrappers */
-main[data-testid="stApp"],
-.stApp, #root {
+/* Remove background wrappers */
+main[data-testid="stApp"], .stApp, #root {
   background: transparent !important;
 }
 
-/* Remove Streamlit default padding block (THE GHOST BOX) */
-div[data-testid="stBlock"],
+/* 🔥 BIG FIX — Remove the ghost block ABOVE your app card */
 div[data-testid="stVerticalBlock"],
-div[data-testid="stHorizontalBlock"] {
+div[data-testid="stVerticalBlock"] > div {
   background: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -51,46 +49,56 @@ div[data-testid="stHorizontalBlock"] {
   box-shadow: none !important;
 }
 
-/* Remove Streamlit header ghost padding */
-header, .stApp > header {
+/* Remove padding container Streamlit injects above cards */
+.st-emotion-cache-lv6ox6,
+.st-emotion-cache-18k9ftu {
   background: transparent !important;
-  height: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 
-/* Tighten layout */
-.block-container {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
+/* Remove ghost border-radius white blocks */
+div[class*="st-emotion-cache"][style*="border-radius"] {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Remove random empty spacing divs */
+div:empty {
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: none !important;
 }
 
 /* ---------------------------------------------------------------
-   Main Glass Panel Card
+   MAIN APP CARD (Glass UI)
 -----------------------------------------------------------------*/
 .app-card {
-  margin: 20px auto;
-  padding: 28px 38px;
+  margin: 26px auto;
+  padding: 32px 40px;
   max-width: 1180px;
 
-  background: var(--glass-bg);
+  background: var(--glass-bg) !important;
   border-radius: 16px;
   border: 1px solid var(--glass-border);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
   backdrop-filter: var(--glass-blur);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
 }
 
 /* ---------------------------------------------------------------
-   Buttons
+   BUTTONS
 -----------------------------------------------------------------*/
 .stButton > button {
   background: linear-gradient(90deg, var(--primary), var(--accent));
   border: none;
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px 22px;
   border-radius: 8px;
   font-weight: 600;
-  transition: 0.2s ease-in-out;
+  transition: 0.18s ease-in-out;
   cursor: pointer;
 }
 
@@ -100,39 +108,39 @@ header, .stApp > header {
 }
 
 /* ---------------------------------------------------------------
-   Headers
+   HEADERS
 -----------------------------------------------------------------*/
 h1, .stApp h1 {
   color: var(--primary);
   font-weight: 800;
   letter-spacing: -0.5px;
 }
-
-h2, h3, h4, h5 {
+h2, h3 {
   color: #1f2937;
+  font-weight: 700;
 }
 
 /* ---------------------------------------------------------------
-   Info / warning / success boxes
+   INFO BOXES
 -----------------------------------------------------------------*/
 .stInfo, .stSuccess, .stWarning {
-  border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(15,23,42,0.06);
+  border-radius: 10px !important;
+  box-shadow: 0 6px 14px rgba(15,23,42,0.06);
 }
 
 /* ---------------------------------------------------------------
-   Result Card Styling
+   RESULTS CARD
 -----------------------------------------------------------------*/
 .result-card {
   background: var(--card-bg);
   border-radius: 14px;
   padding: 20px;
-  border: 1px solid rgba(124, 58, 237, 0.10);
-  box-shadow: 0 10px 26px rgba(15,23,42,0.06);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  box-shadow: 0 10px 26px rgba(15,23,42,0.05);
 }
 
 /* ---------------------------------------------------------------
-   Keyword Chips
+   KEYWORD CHIPS
 -----------------------------------------------------------------*/
 .chips {
   display: flex;
@@ -142,14 +150,12 @@ h2, h3, h4, h5 {
 }
 
 .chip {
-  display: inline-block;
   padding: 6px 12px;
   border-radius: 999px;
   font-size: 13px;
   color: #0f172a;
   background: rgba(15,23,42,0.06);
   border: 1px solid rgba(15,23,42,0.04);
-  transition: 0.2s;
 }
 
 .chip-matched {
@@ -165,83 +171,21 @@ h2, h3, h4, h5 {
 }
 
 /* ---------------------------------------------------------------
-   Lists
+   LIST TEXT
 -----------------------------------------------------------------*/
 .list-item {
   margin: 4px 0;
   line-height: 1.4rem;
 }
 
-.strength {
-  color: var(--success);
-  font-weight: 600;
-}
-
-.suggestion {
-  color: var(--accent);
-  font-weight: 500;
-}
-/* ============================
-   FINAL GHOST-BLOCK KILLER
-   ============================ */
-
-/* Hide any empty direct child blocks (common Streamlit spacing nodes) */
-.app-card > div:empty,
-.app-card > div:only-child:empty,
-.app-card > div > div:empty {
-  display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  visibility: hidden !important;
-}
-
-/* Use :has() (modern browsers) to hide containers that only contain an empty block */
-.app-card:has(> div:empty) { padding-top: 16px !important; }
-
-/* Hide any top-level rounded white block inside app card with no text (defensive) */
-.app-card > div[role="group"]:empty,
-.app-card > div[role="group"] > div:empty {
-  display: none !important;
-}
-
-/* Stronger selectors for Streamlit's auto-injected blocks */
-div[data-testid="stBlock"]:empty,
-div[data-testid="stVerticalBlock"]:empty,
-div[data-testid="stHorizontalBlock"]:empty {
-  display: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Defensive: remove visible rounded backgrounds with large width + tiny content */
-.app-card > div > div[style*="border-radius"]:empty,
-.app-card > div[style*="border-radius"]:empty {
-  display: none !important;
-}
-
-/* Remove any stray large empty streamlit wrappers outside the card too */
-div[data-testid="stBlock"][style*="border-radius"]:not(.app-card) {
-  display: none !important;
-}
-
-/* Keep layout nice after removing the block */
-.app-card { padding-top: 18px !important; }
-
-/* Ensure textareas and uploaders keep normal spacing */
-.stTextArea, .stFileUploader, .stTextInput {
-  margin-top: 8px !important;
-}
-
+.strength { color: var(--success); font-weight: 600; }
+.suggestion { color: var(--accent); font-weight: 500; }
 
 /* ---------------------------------------------------------------
-   Responsive
+   RESPONSIVE
 -----------------------------------------------------------------*/
 @media (max-width: 700px) {
   .app-card {
-    padding: 18px 22px;
+    padding: 20px 22px;
   }
-  .chips { gap: 6px; }
 }
